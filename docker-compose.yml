@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    container_name: dashboard-api
+    restart: always
+    ports:
+      - "8001:8000"
+    command: bash -c "uvicorn app.main:app --host 0.0.0.0"
+    env_file:
+      - .env
