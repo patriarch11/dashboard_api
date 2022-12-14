@@ -68,8 +68,7 @@ class UserService:
                 )
         except PyJWTError:
             raise CREDENTIALS_EXCEPTION
-
-        await models.User.objects.filter(id=payload['sub']).update(is_email_verif=True)
+        await models.User.objects.filter(id=uuid.UUID(payload["sub"])).update(is_email_verif=True)
 
     def __init__(self, user_id: uuid.UUID = None):
         self.user_id = user_id
@@ -108,4 +107,4 @@ class UserService:
         for id_ in id_list:
             await CompanyService(user_id=self.user_id, company_id=id_).delete_company()
         id_list.clear()
-        await models.User.objects.delete(id=self.user_id)
+        await models.User.objects.clear(id=self.user_id)

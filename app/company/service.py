@@ -20,6 +20,7 @@ class CompanyService:
         # TODO: refactor getting user from db
         user = await models.User.objects.filter(id=user.id).first()
         company = await models.Company.objects.create(
+            id=uuid.uuid4(),
             **company_data.dict(),
             owner=user
             )

@@ -22,6 +22,7 @@ class ProjectService:
     async def create_project(self, project_data: schemas.ProjectCreate) -> schemas.Project:
         try:
             project = await models.Project.objects.create(
+                id=uuid.uuid4(),
                 **project_data.dict(),
                 company=self.company_id[0]
                 )
@@ -37,7 +38,7 @@ class ProjectService:
         try:
             project = await models.Project.objects.filter(
                 id=self.project_id,
-                company=self.company_id[0]
+                # company=self.company_id[0]2e1590ee-b26f-4c79-9fec-a351cf38a81e
                 ).first()
         except Exception:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -59,7 +60,7 @@ class ProjectService:
         try:
             await models.Project.objects.filter(
                 id=self.project_id,
-                company=self.company_id
+                # company=self.company_id
                 ).update(**new_data)
         except Exception:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

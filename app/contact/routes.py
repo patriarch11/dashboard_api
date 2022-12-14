@@ -27,8 +27,9 @@ async def get_contact(contact_id: uuid.UUID):
     return await ContactService(contact_id=contact_id).get_contact()
 
 
-@contact_router.get("/list", response_model=list[schemas.Contact], dependencies=[Depends(JWTBearer())])
-async def get_contacts_list(company_id: uuid.UUID):
+# /list
+@contact_router.get("/", response_model=list[schemas.Contact], dependencies=[Depends(JWTBearer())])
+async def get_list_contacts(company_id: uuid.UUID):
     return await ContactService(company_id=company_id).get_contacts_list()
 
 

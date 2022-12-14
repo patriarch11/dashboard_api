@@ -12,20 +12,23 @@ class ContactService:
 
     async def create_contact(self, contact_data: schemas.ContactCreate) -> schemas.Contact:
         contact = await models.Contact.objects.create(
+            id=uuid.uuid4(),
             **contact_data.dict(),
             company=self.company_id[0]
             )
         return schemas.Contact.parse_obj(contact)
 
-    async def get_contact(self):
-        return await models.Contact.objects.filter(
+    async def get_contact(self) -> schemas.Contact:
+        contact = await models.Contact.objects.filter(
             id=self.contact_id
             ).first()
+        return schemas.Contact.parse_obj(contact)
 
     async def get_contacts_list(self) -> list[schemas.Contact]:
-        return await models.Contact.objects.filter(
+        contacts = await models.Contact.objects.filter(
             company=self.company_id[0]
             ).all()
+        return [schemas.Contact.parse_obj(contact) for contact in contacts]
 
     async def update_contact(self, contact_data: schemas.ContactUpdate) -> schemas.Contact:
         new_data = dict()

@@ -1,5 +1,6 @@
 import base64
 import json
+import uuid
 
 import requests
 from asyncpg import UniqueViolationError
@@ -112,7 +113,7 @@ class AuthService:
         user = await validate_token(token)
         await self.set_new_pass(user.id, password)
 
-    async def set_new_pass(self, user_id: int, password: str):
+    async def set_new_pass(self, user_id: uuid.UUID, password: str):
         await models.User.objects.filter(id=user_id).update(
             password_hash=self.hash_password(password)
             )
@@ -130,6 +131,7 @@ class AuthService:
 
             try:
                 user = await models.User.objects.create(
+                    id=uuid.uuid4(),
                     email=user_data["email"],
                     first_name=user_data["first_name"],
                     last_name=user_data["last_name"],
@@ -157,6 +159,7 @@ class AuthService:
     async def create_new_user(self, user_data: schemas.UserCreate) -> schemas.Token:
         try:
             user = await models.User.objects.create(
+                id=uuid.uuid4(),
                 email=user_data.email,
                 avatar=None,
                 first_name=user_data.first_name,

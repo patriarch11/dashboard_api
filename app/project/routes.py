@@ -33,10 +33,8 @@ async def get_projects_list(company_id: uuid.UUID):
 @project_router.get("/{project_id}", response_model=schemas.Project, dependencies=[Depends(JWTBearer())])
 async def get_project(
         project_id: uuid.UUID,
-        company_id: uuid.UUID
         ):
     return await ProjectService(
-        company_id=company_id,
         project_id=project_id
         ).get_project()
 
@@ -44,11 +42,9 @@ async def get_project(
 @project_router.put("/{project_id}", response_model=schemas.Project, dependencies=[Depends(JWTBearer())])
 async def update_project(
         project_id: uuid.UUID,
-        company_id: uuid.UUID,
         project_data: schemas.ProjectUpdate
         ):
     return await ProjectService(
-        company_id=company_id,
         project_id=project_id
         ).update_project(project_data)
 
